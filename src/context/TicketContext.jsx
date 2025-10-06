@@ -50,6 +50,18 @@ export const TicketProvider = ({ children }) => {
     return { success: true };
   };
 
+  // Ajouter un billet personnalisé (utilisé pour les formules "Visite libre/guidée")
+  const addCustomToCart = (ticket, quantity = 1) => {
+    const customId = ticket.id || `custom-${Date.now()}`;
+    const existingItem = cart.find(item => item.ticketId === customId);
+    if (existingItem) {
+      setCart(prev => prev.map(item => item.ticketId === customId ? { ...item, quantity: item.quantity + quantity } : item));
+    } else {
+      setCart(prev => [...prev, { ticketId: customId, quantity, ticket: { ...ticket, id: customId, isAvailable: true } }]);
+    }
+    return { success: true };
+  };
+
   const removeFromCart = (ticketId) => {
     setCart(prev => prev.filter(item => item.ticketId !== ticketId));
     return { success: true };
@@ -152,6 +164,7 @@ export const TicketProvider = ({ children }) => {
     isLoading,
     error,
     addToCart,
+    addCustomToCart,
     removeFromCart,
     updateCartQuantity,
     clearCart,

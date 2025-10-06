@@ -7,9 +7,21 @@ export default function ScanArtwork() {
   const [scannedCode, setScannedCode] = useState(null);
   const [scanResult, setScanResult] = useState(null);
   const [error, setError] = useState(null);
+  const [locationAllowed, setLocationAllowed] = useState(null); // null=checking, true=inside, false=outside/denied
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+  const detectorRef = useRef(null);
   const navigate = useNavigate();
+
+  // Simulate location detection instead of real geolocation
+  useEffect(() => {
+    setLocationAllowed(null);
+    setError(null);
+    const timer = setTimeout(() => {
+      setLocationAllowed(true);
+    }, 1200);
+    return () => clearTimeout(timer);
+  }, []);
 
   const startScanning = async () => {
     try {
@@ -21,8 +33,17 @@ export default function ScanArtwork() {
         videoRef.current.srcObject = stream;
         setIsScanning(true);
         setError(null);
+        // Initialize BarcodeDetector if available
+        if ('BarcodeDetector' in window) {
+          try {
+            // @ts-ignore - BarcodeDetector may not be typed
+            detectorRef.current = new window.BarcodeDetector({ formats: ['qr_code'] });
+            requestAnimationFrame(scanLoop);
+          } catch { /* no-op */ }
+        }
       }
     } catch (err) {
+      void err;
       setError('Impossible d\'accéder à la caméra. Veuillez autoriser l\'accès à la caméra.');
     }
   };
@@ -45,12 +66,39 @@ export default function ScanArtwork() {
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
       context.drawImage(video, 0, 0);
-      
-      // Simuler la détection de QR code
-      const mockQRCode = `QR${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`;
-      setScannedCode(mockQRCode);
-      validateQRCode(mockQRCode);
+
+      // Fallback: simulate a QR capture when BarcodeDetector not available
+      if (!detectorRef.current) {
+        const mockQRCode = `QR${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`;
+        setScannedCode(mockQRCode);
+        validateQRCode(mockQRCode);
+      }
     }
+  };
+
+  const scanLoop = async () => {
+    if (!isScanning || !videoRef.current || !canvasRef.current || !detectorRef.current) return;
+    try {
+      const canvas = canvasRef.current;
+      const video = videoRef.current;
+      const context = canvas.getContext('2d');
+      if (video.videoWidth && video.videoHeight) {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const bitmap = canvas.transferToImageBitmap ? canvas.transferToImageBitmap() : null;
+        const results = await detectorRef.current.detect(bitmap || canvas);
+        if (results && results.length > 0) {
+          const code = results[0].rawValue || results[0].rawValue === '' ? results[0].rawValue : (results[0].rawValue);
+          if (code) {
+            setScannedCode(code);
+            validateQRCode(code);
+            return; // stop loop after detection
+          }
+        }
+      }
+    } catch { /* no-op */ }
+    requestAnimationFrame(scanLoop);
   };
 
   const validateQRCode = (code) => {
@@ -91,33 +139,28 @@ export default function ScanArtwork() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#f5f4ef]"> 
       {/* Header */}
-      <div className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => navigate(-1)}
-              className="flex items-center text-gray-600 hover:text-gray-900"
-            >
-              <ArrowLeft className="w-5 h-5 mr-2" />
-              Retour
-            </button>
-            <h1 className="text-2xl font-bold text-gray-900">Scanner une œuvre</h1>
-            <div className="w-20"></div>
-          </div>
-        </div>
-      </div>
+     
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {!isScanning && !scannedCode && !scanResult && (
+        {locationAllowed === null && (
           <div className="text-center">
-            <div className="bg-white rounded-2xl shadow-sm p-8">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-8">
+              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
+              <p className="text-gray-600 dark:text-gray-300">Vérification de votre position...</p>
+            </div>
+          </div>
+        )}
+
+        {!isScanning && !scannedCode && !scanResult && locationAllowed === true && (
+          <div className="text-center">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-8">
               <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <QrCode className="w-12 h-12 text-blue-600" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Scanner un QR Code</h2>
-              <p className="text-gray-600 mb-8">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Scanner un QR Code</h2>
+              <p className="text-gray-600 dark:text-gray-300 mb-8">
                 Pointez votre caméra vers le QR code d'une œuvre d'art pour obtenir des informations détaillées.
               </p>
               <button
@@ -131,8 +174,10 @@ export default function ScanArtwork() {
           </div>
         )}
 
+        {/* Location disallowed state removed in simulation mode */}
+
         {isScanning && !scannedCode && (
-          <div className="bg-white rounded-2xl shadow-sm p-8">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-8">
             <div className="relative">
               <video
                 ref={videoRef}
@@ -151,13 +196,15 @@ export default function ScanArtwork() {
             </div>
             
             <div className="mt-6 text-center">
-              <p className="text-gray-600 mb-4">Pointez la caméra vers le QR code</p>
-              <button
-                onClick={captureFrame}
-                className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition mr-4"
-              >
-                Capturer
-              </button>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">Pointez la caméra vers le QR code</p>
+              {!detectorRef.current && (
+                <button
+                  onClick={captureFrame}
+                  className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition mr-4"
+                >
+                  Capturer
+                </button>
+              )}
               <button
                 onClick={stopScanning}
                 className="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition"
@@ -169,15 +216,15 @@ export default function ScanArtwork() {
         )}
 
         {scannedCode && !scanResult && (
-          <div className="bg-white rounded-2xl shadow-sm p-8 text-center">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-8 text-center">
             <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Analyse du QR Code...</h3>
-            <p className="text-gray-600">Code détecté: {scannedCode}</p>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Analyse du QR Code...</h3>
+            <p className="text-gray-600 dark:text-gray-300">Code détecté: {scannedCode}</p>
           </div>
         )}
 
         {scanResult && (
-          <div className="bg-white rounded-2xl shadow-sm p-8">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-8">
             <div className="text-center">
               <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${
                 scanResult.valid ? 'bg-green-100' : 'bg-red-100'
@@ -224,7 +271,7 @@ export default function ScanArtwork() {
         )}
 
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-6">
+          <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-300 px-4 py-3 rounded-lg mb-6">
             {error}
           </div>
         )}

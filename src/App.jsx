@@ -16,8 +16,10 @@ import Accueil from './pages/accueil'
 import UserLogin from './pages/user/UserLogin'
 import ArtworkDetail from './pages/user/ArtworkDetail'
 import PurchaseTicket from './pages/user/PurchaseTicket'
+import Boutique from './pages/user/Boutique'
 import ScanArtwork from './pages/user/ScanArtwork'
 import VirtualVisit from './pages/user/VirtualVisit'
+import Histoire from './pages/Histoire'
 
 // Admin pages
 import AdminLogin from './pages/admin/adminLogin'
@@ -38,9 +40,10 @@ function App() {
                   {/* Public routes */}
                   <Route path="/" element={<Accueil />} />
                   <Route path="/billet" element={<PurchaseTicket />} />
-                  <Route path="/boutique" element={<PurchaseTicket />} />
+                  <Route path="/boutique" element={<Boutique />} />
                   <Route path="/scan" element={<ScanArtwork />} />
                   <Route path="/visite-virtuelle/:id" element={<VirtualVisit />} />
+                  <Route path="/histoire" element={<Histoire />} />
                   <Route path="/artwork/:id" element={<ArtworkDetail />} />
                   
                   {/* User routes */}

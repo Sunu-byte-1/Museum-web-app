@@ -16,24 +16,24 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-gray-900 text-white">
+    <footer className="bg-[#1c1c1c] text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Informations du musée */}
           <div>
-            <h3 className="text-xl font-bold mb-4">Musée des Arts et Culture</h3>
+            <h3 className="text-xl font-bold mb-4">Musée des Civilisations Noires</h3>
             <p className="text-gray-300 mb-4">
               Découvrez l'histoire, l'art et la culture à travers nos collections uniques 
               et nos expositions exceptionnelles.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-white transition">
+              <a href="facebook.com/mcndakar" className="text-gray-400 hover:text-white transition">
                 <Facebook className="w-5 h-5" />
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition">
+              <a href="www.x.com/mcndakar" className="text-gray-400 hover:text-white transition">
                 <Twitter className="w-5 h-5" />
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition">
+              <a href="instagram.com/mcndakar" className="text-gray-400 hover:text-white transition">
                 <Instagram className="w-5 h-5" />
               </a>
               <a href="#" className="text-gray-400 hover:text-white transition">
@@ -81,23 +81,25 @@ export default function Footer() {
               <li className="flex items-start">
                 <MapPin className="w-5 h-5 text-blue-400 mr-2 mt-0.5 flex-shrink-0" />
                 <span className="text-gray-300">
-                  123 Avenue des Arts<br />
-                  75001 Paris, France
+                  Autoroute prolongée × <br /> Place de la Gare / <br />
+                  Plateau, Dakar
                 </span>
               </li>
               <li className="flex items-center">
                 <Phone className="w-5 h-5 text-blue-400 mr-2 flex-shrink-0" />
-                <span className="text-gray-300">+33 1 23 45 67 89</span>
+                <span className="text-gray-300">+221 33 889 11 80</span>
               </li>
               <li className="flex items-center">
                 <Mail className="w-5 h-5 text-blue-400 mr-2 flex-shrink-0" />
-                <span className="text-gray-300">contact@musee.com</span>
+                <span className="text-[#f5f4ef]">mcn@mcn.sn</span>
               </li>
               <li className="flex items-start">
                 <Clock className="w-5 h-5 text-blue-400 mr-2 mt-0.5 flex-shrink-0" />
-                <div className="text-gray-300">
-                  <div>Lun - Ven: 9h00 - 18h00</div>
-                  <div>Sam - Dim: 10h00 - 19h00</div>
+                <div className="text-[#f5f4ef] font-bold">
+                  <div>Mardi - Dimanche: </div>
+                  <div>10h00 - 19h00</div>
+                  <div></div>
+                  <div>Lundi: Fermé</div>
                 </div>
               </li>
             </ul>
@@ -105,8 +107,8 @@ export default function Footer() {
 
           {/* Newsletter */}
           <div>
-            <h4 className="text-lg font-semibold mb-4">Newsletter</h4>
-            <p className="text-gray-300 mb-4">
+            <h4 className="text-lg text-[#f5f4ef] font-semibold mb-4">Newsletter</h4>
+            <p className="text-[#f5f4ef] mb-4">
               Restez informé de nos dernières expositions et événements.
             </p>
             <div className="space-y-3">
@@ -115,7 +117,7 @@ export default function Footer() {
                 placeholder="Votre adresse email"
                 className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400"
               />
-              <button className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition">
+              <button className="w-full bg-blue-600 text-[#f5f4ef] py-2 px-4 rounded-lg hover:bg-blue-700 transition">
                 S'abonner
               </button>
             </div>
@@ -126,7 +128,7 @@ export default function Footer() {
         <div className="border-t border-gray-800 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="text-gray-400 text-sm mb-4 md:mb-0">
-              © {currentYear} Musée des Arts et Culture. Tous droits réservés.
+               Musée des Civilisations Noires.
             </div>
             <div className="flex space-x-6 text-sm">
               <a href="#" className="text-gray-400 hover:text-white transition">
@@ -141,12 +143,7 @@ export default function Footer() {
             </div>
           </div>
           
-          {/* Message de fin */}
-          <div className="text-center mt-6 pt-6 border-t border-gray-800">
-            <p className="text-gray-400 text-sm flex items-center justify-center">
-              Fait avec <Heart className="w-4 h-4 text-red-500 mx-1" /> pour l'art et la culture
-            </p>
-          </div>
+         
         </div>
       </div>
     </footer>

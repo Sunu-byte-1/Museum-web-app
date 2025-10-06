@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useAdmin } from '../context/AdminContext';
+// import { useAdmin } from '../context/AdminContext';
 import eventsData from '../data/events.json';
+//import { Link as ScrollLink, animateScroll as scroll } from 'react-scroll';
+import musee from '../assets/historique/musee.webp';
+
+
 import { 
   ArrowRight, 
   Camera, 
@@ -22,7 +26,7 @@ import {
 // Composant Hero Section
 function HeroSection() {
   return (
-    <section className="relative h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative h-screen flex items-center justify-center overflow-hidden bg-white dark:bg-gray-900">
       {/* Video Background */}
       <video
         autoPlay
@@ -44,7 +48,7 @@ function HeroSection() {
       </div>
       
       {/* Content */}
-      <div className="relative z-10 text-center text-white max-w-5xl mx-auto px-4">
+      <div className="relative z-10 text-center text-white dark:text-gray-100 max-w-5xl mx-auto px-4">
         <div className="mb-6">
           <span className="inline-block px-4 py-2 bg-orange-600 text-white text-sm font-semibold rounded-full mb-4">
             Musée des Civilisations Noires
@@ -53,7 +57,7 @@ function HeroSection() {
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 font-serif leading-tight">
           Bienvenue au Musée des Civilisations Noires
         </h1>
-        <p className="text-xl md:text-2xl mb-8 text-orange-100 max-w-3xl mx-auto leading-relaxed">
+        <p className="text-xl md:text-2xl mb-8 text-orange-100 dark:text-gray-200 max-w-3xl mx-auto leading-relaxed">
           Explorez nos œuvres en ligne ou sur place et découvrez un patrimoine culturel exceptionnel
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -66,7 +70,7 @@ function HeroSection() {
           </Link>
           <Link
             to="/billet"
-            className="bg-white text-gray-900 px-8 py-4 rounded-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 flex items-center justify-center"
+            className="bg-white text-gray-900 dark:bg-gray-900 dark:text-white px-8 py-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 flex items-center justify-center"
           >
             <Ticket className="w-5 h-5 mr-2" />
             Acheter un billet
@@ -78,6 +82,8 @@ function HeroSection() {
 }
 
 // Composant Choix de l'expérience
+// dans cette section je veux que le coux experience soit à droite et à gauche les horaires du musee,
+
 function ExperienceSection() {
   const experiences = [
     {
@@ -105,15 +111,15 @@ function ExperienceSection() {
       hoverColor: "hover:from-purple-600 hover:to-purple-700"
     }
   ];
-
+// dans cette section je veux que le coux experience soit à droite et à gauche les horaires du musee,
   return (
-    <section className="py-20 bg-stone-50 dark:bg-stone-800">
+    <section className="py-20 bg-[#f5f4ef]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             Choisissez votre expérience
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300">
+          <p className="text-lg text-gray-600">
             Trois façons de découvrir notre patrimoine culturel
           </p>
         </div>
@@ -125,15 +131,15 @@ function ExperienceSection() {
               <Link
                 key={index}
                 to={exp.link}
-                className="group bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 border border-gray-100 dark:border-gray-700"
+                className="group bg-dark-500 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3  "
               >
                 <div className={`w-20 h-20 ${exp.color} ${exp.hoverColor} rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-all duration-300 shadow-lg`}>
                   <Icon className="w-10 h-10 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 text-center group-hover:text-orange-600 transition-colors duration-300">
+                <h3 className="text-xl font-bold text-gray-900  mb-4 text-center group-hover:text-orange-600 transition-colors duration-300">
                   {exp.title}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-300 text-center leading-relaxed">
+                <p className="text-gray-600  text-center leading-relaxed">
                   {exp.description}
                 </p>
                 <div className="mt-6 flex items-center justify-center text-orange-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -177,13 +183,13 @@ function HistorySection() {
   ];
 
   return (
-    <section id="history-section" className="py-20 bg-white dark:bg-gray-900 relative overflow-hidden">
+    <section id="history-section" className="py-20 bg-[#f5f4ef] relative overflow-hidden shadow-inner">
       {/* Pattern de fond */}
-      <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-transparent dark:from-orange-900/10 dark:to-transparent"></div>
+      <div className="absolute inset-0 "></div>
       
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6 font-serif">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900  mb-6 font-serif">
             Notre Histoire
           </h2>
           <div className="w-24 h-1 bg-orange-600 mx-auto mb-8"></div>
@@ -192,46 +198,38 @@ function HistorySection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
             <div className="prose prose-lg dark:prose-invert max-w-none">
-              <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
+              <p className="text-gray-600  text-lg leading-relaxed">
                 Le Musée des Civilisations Noires est né d'une vision ambitieuse : créer un espace 
                 dédié à la préservation et à la valorisation du patrimoine culturel africain et de 
                 la diaspora noire à travers le monde.
               </p>
-              <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
+              <p className="text-gray-600  text-lg leading-relaxed">
                 Depuis son inauguration, notre musée s'est imposé comme une référence internationale 
                 dans la mise en valeur des civilisations noires, offrant aux visiteurs une expérience 
                 immersive et éducative unique.
               </p>
-              <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
-                Chaque exposition, chaque œuvre, chaque événement raconte une partie de cette 
-                histoire riche et complexe, contribuant à une meilleure compréhension de notre 
-                patrimoine commun.
-              </p>
+              {//ajouter bouton voir plus qui va vers la page histoire
+              }
+              <div className="mt-6">
+                <Link
+                  to="/histoire"
+                  className="inline-block bg-orange-600 text-white px-6 py-3 rounded-lg hover:bg-orange-700 transition-all duration-300 transform hover:scale-105 font-semibold"
+                >
+                  En savoir plus
+                </Link>
+              </div>
+              
             </div>
           </div>
           
-          <div className="grid grid-cols-2 gap-6">
-            <div className="space-y-6">
-              <img
-                src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?auto=format&fit=crop&w=400&q=80"
-                alt="Création du musée"
-                className="rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300"
-              />
-              <img
-                src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?auto=format&fit=crop&w=400&q=80"
-                alt="Chantier"
-                className="rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300"
-              />
-            </div>
+          <div className="grid grid-cols-1 gap-6">
+            
             <div className="space-y-6 mt-8">
+            
               <img
-                src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?auto=format&fit=crop&w=400&q=80"
-                alt="Pose première pierre"
-                className="rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300"
-              />
-              <img
-                src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?auto=format&fit=crop&w=400&q=80"
+                src={musee}
                 alt="Inauguration"
+                loading="lazy" decoding="async" sizes="(max-width: 768px) 100vw, 50vw"
                 className="rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300"
               />
             </div>
@@ -242,12 +240,12 @@ function HistorySection() {
         <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8">
           {stats.map((stat, index) => (
             <div key={index} className="text-center group">
-              <div className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-2xl p-8 hover:shadow-lg transition-all duration-300">
-                <div className={`text-4xl md:text-5xl lg:text-6xl font-bold text-orange-600 mb-3 transition-all duration-1000 group-hover:scale-110 ${isVisible ? 'opacity-100 transform translate-y-0' : 'opacity-0 transform translate-y-8'}`}
+              <div className="bg-white rounded-2xl p-8 hover:shadow-lg transition-all duration-300">
+                <div className={`text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-3 transition-all duration-1000 group-hover:scale-110 ${isVisible ? 'opacity-100 transform translate-y-0' : 'opacity-0 transform translate-y-8'}`}
                      style={{ transitionDelay: `${index * 200}ms` }}>
                   {isVisible ? stat.number : 0}{stat.suffix}
                 </div>
-                <div className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+                <div className="text-lg font-semibold text-gray-800  group-hover:text-orange-600 transition-colors duration-300">
                   {stat.label}
                 </div>
               </div>
@@ -262,24 +260,24 @@ function HistorySection() {
 // Composant Événements
 function EventsSection() {
   return (
-    <section className="py-20 bg-stone-50 dark:bg-stone-800 relative overflow-hidden">
+    <section className="py-20 bg-[#f5f4ef] shadow-inner relative overflow-hidden">
       {/* Pattern de fond */}
-      <div className="absolute inset-0 bg-gradient-to-r from-orange-50/50 to-transparent dark:from-orange-900/10 dark:to-transparent"></div>
+      <div className="absolute inset-0 "></div>
       
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6 font-serif">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900  mb-6 font-serif">
             Actualités & Événements
           </h2>
           <div className="w-24 h-1 bg-orange-600 mx-auto mb-6"></div>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 dark:text-gray-600 max-w-2xl mx-auto">
             Découvrez nos prochains événements et expositions exceptionnelles
           </p>
         </div>
         
         <div className="flex overflow-x-auto gap-6 pb-4 scrollbar-hide">
           {eventsData.map((event) => (
-            <div key={event.id} className="flex-shrink-0 w-80 bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 dark:border-gray-700">
+            <div key={event.id} className="flex-shrink-0 w-80 bg-white  rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 ">
               <div className="relative">
                 <img
                   src={event.image}
@@ -295,14 +293,14 @@ function EventsSection() {
               <div className="p-6">
                 <div className="flex items-center mb-3">
                   <Calendar className="w-4 h-4 text-orange-600 mr-2" />
-                  <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">
+                  <span className="text-sm text-gray-600  font-medium">
                     {new Date(event.date).toLocaleDateString('fr-FR')}
                   </span>
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3 line-clamp-2">
+                <h3 className="text-lg font-bold text-gray-900  mb-3 line-clamp-2">
                   {event.titre}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-3 leading-relaxed">
+                <p className="text-gray-600  text-sm line-clamp-3 leading-relaxed">
                   {event.description}
                 </p>
                 <div className="mt-4 flex items-center text-orange-600 text-sm font-medium">
@@ -321,34 +319,28 @@ function EventsSection() {
 // Composant CTA
 function CTASection() {
   return (
-    <section className="py-20 bg-gradient-to-r from-orange-600 to-orange-700 relative overflow-hidden">
+    <section className="py-20 bg-[#dddcd9] relative overflow-hidden">
       {/* Pattern décoratif */}
-      <div className="absolute inset-0 bg-black bg-opacity-10"></div>
-      <div className="absolute top-0 left-0 w-full h-full">
-        <div className="absolute top-10 left-10 w-20 h-20 bg-white bg-opacity-10 rounded-full"></div>
-        <div className="absolute top-32 right-20 w-16 h-16 bg-white bg-opacity-10 rounded-full"></div>
-        <div className="absolute bottom-20 left-1/4 w-12 h-12 bg-white bg-opacity-10 rounded-full"></div>
-        <div className="absolute bottom-10 right-10 w-24 h-24 bg-white bg-opacity-10 rounded-full"></div>
-      </div>
+      
       
       <div className="relative z-10 max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 font-serif">
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 font-serif">
           Prêt à découvrir nos trésors ?
         </h2>
-        <p className="text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
+        <p className="text-xl text-gray-500 mb-8 max-w-2xl mx-auto">
           Plongez dans l'univers fascinant des civilisations noires et explorez un patrimoine culturel exceptionnel
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             to="/visite-virtuelle/1"
-            className="bg-white text-orange-600 px-8 py-4 rounded-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 flex items-center justify-center font-semibold"
+            className="bg-white text-orange-600 dark:bg-gray-900 dark:text-white px-8 py-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 flex items-center justify-center font-semibold"
           >
             <Play className="w-5 h-5 mr-2" />
             Commencer la visite virtuelle
           </Link>
           <Link
             to="/billet"
-            className="bg-gray-900 text-white px-8 py-4 rounded-lg hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 flex items-center justify-center font-semibold"
+            className="bg-gray-900 text-white dark:bg-white dark:text-gray-900 px-8 py-4 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 flex items-center justify-center font-semibold"
           >
             <Ticket className="w-5 h-5 mr-2" />
             Acheter un ticket
@@ -361,12 +353,14 @@ function CTASection() {
 
 export default function Accueil() {
   return (
-    <div className="min-h-screen bg-stone-50 dark:bg-stone-900">
+    <div className="min-h-screen bg-milk">
       <HeroSection />
-      <ExperienceSection />
-      <HistorySection />
-      <EventsSection />
-      <CTASection />
+      <div className="animate-fade-in">
+        <ExperienceSection />
+        <HistorySection />
+        <EventsSection />
+        <CTASection />
+      </div>
     </div>
   );
 }

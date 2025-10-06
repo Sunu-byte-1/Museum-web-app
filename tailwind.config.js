@@ -16,6 +16,13 @@ export default {
           darkBg: '#2D2A28',
           lightNav: '#3B3A39',
         },
+        brand: {
+          primary: '#0f172a',
+          accent: '#d97706',
+          gold: '#c4a251',
+          surface: '#ffffff',
+          surfaceMuted: '#f6f5f4'
+        },
         primary: {
           50: '#eff6ff',
           100: '#dbeafe',
