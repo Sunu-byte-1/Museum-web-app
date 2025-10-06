@@ -1,4 +1,4 @@
-  import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
   import { Link, useNavigate } from "react-router-dom";
   import { useUser } from "../context/UserContext";
   import { Moon, Sun, ChevronDown, User, LogOut, Menu, X } from "lucide-react";
@@ -59,23 +59,23 @@
       } else {
         root.classList.remove('dark');
       }
+      // Ajout de la fluidité sur le changement de thème
+      root.classList.add('transition-colors');
+      root.style.transitionDuration = '500ms';
     }, []);
 
-    const applyTheme = (isDark) => {
-      const root = document.documentElement;
-      if (isDark) {
-        root.classList.add('dark');
-        saveTheme('dark');
-      } else {
-        root.classList.remove('dark');
-        saveTheme('light');
-      }
-    };
-
-    const toggleTheme = () => {
-      const next = !darkMode;
-      setDarkMode(next);
-      applyTheme(next);
+    const handleToggleTheme = () => {
+      setDarkMode((prev) => {
+        const newMode = !prev;
+        const root = document.documentElement;
+        if (newMode) {
+          root.classList.add('dark');
+        } else {
+          root.classList.remove('dark');
+        }
+        saveTheme(newMode ? 'dark' : 'light');
+        return newMode;
+      });
     };
 
     const handleLogout = () => {
@@ -107,6 +107,9 @@
               <Link to="/billet" className="hover:text-[#b08b4f] transition-colors duration-00 text-lg">
                 Acheter un billet
               </Link>
+                <Link to="/visite-virtuelle/1" className="hover:text-[#b08b4f] transition-colors duration-00 text-lg">
+                    Visite virtuelle
+                </Link>
               <Link to="/boutique" className="hover:text-[#b08b4f] transition-colors duration-00 text-lg">
                 Boutique
               </Link>
@@ -204,10 +207,11 @@
 
               {/* Toggle Thème */}
               <button
-                onClick={toggleTheme}
-                className="p-2 rounded-full bg-gray-700 dark:bg-gray-900 text-gray-800 dark:text-white hover:scale-110 transition shadow-soft"
+                onClick={handleToggleTheme}
+                className="ml-2 p-2 rounded-full bg-museum-light dark:bg-museum-darkBg text-museum-dark dark:text-brand-gold border border-gray-300 dark:border-brand-gold transition-colors duration-500"
+                title={darkMode ? 'Mode clair' : 'Mode sombre'}
               >
-                {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+                {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
               </button>
             </div>
 
@@ -215,7 +219,7 @@
             {/* Boutons visibles uniquement sur mobile: toggle thème + hamburger */}
             <div className="lg:hidden flex items-center space-x-2">
               <button
-                onClick={toggleTheme}
+                onClick={handleToggleTheme}
                 className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-yellow-400 hover:scale-110 transition"
               >
                 {darkMode ? <Sun size={20} /> : <Moon size={20} />}
