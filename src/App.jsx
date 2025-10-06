@@ -5,6 +5,18 @@ import { UserProvider } from './context/UserContext'
 import { AdminProvider } from './context/AdminContext'
 import { TicketProvider } from './context/TicketContext'
 
+ /**
+  * Composant racine de l'application.
+  *
+  * Empilement des contextes (Providers):
+  * - UserProvider: gestion de l'authentification et profil utilisateur
+  * - AdminProvider: gestion des œuvres et des statistiques d'administration
+  * - TicketProvider: panier, billets et achats
+  *
+  * Routage:
+  * - Déclare l'ensemble des pages publiques, utilisateur et admin.
+  * - `BrowserRouter` encapsule la navigation côté client.
+  */
 // Components
 import Header from './components/header'
 import Footer from './components/footer'
@@ -66,3 +78,4 @@ function App() {
 }
 
 export default App
+

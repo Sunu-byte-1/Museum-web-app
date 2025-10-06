@@ -12,6 +12,16 @@ import {
   Heart
 } from 'lucide-react';
 
+ /**
+  * Pied de page (Footer)
+  *
+  * Contenu:
+  * - Présentation du musée et liens vers réseaux sociaux
+  * - Liens rapides de navigation interne
+  * - Informations pratiques (adresse, téléphone, email, horaires)
+  * - Formulaire de newsletter (non connecté – démonstration visuelle)
+  * - Barre de mentions légales / politiques
+  */
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
@@ -106,6 +116,7 @@ export default function Footer() {
           </div>
 
           {/* Newsletter */}
+          {/* Formulaire visuel – ne déclenche pas de requête réseau ici */}
           <div>
             <h4 className="text-lg text-[#f5f4ef] font-semibold mb-4">Newsletter</h4>
             <p className="text-[#f5f4ef] mb-4">
@@ -143,9 +154,10 @@ export default function Footer() {
             </div>
           </div>
           
-         
+          
         </div>
       </div>
     </footer>
   );
 }
+

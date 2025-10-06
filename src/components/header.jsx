@@ -2,10 +2,23 @@
   import { Link, useNavigate } from "react-router-dom";
   import { useUser } from "../context/UserContext";
   import { Moon, Sun, ChevronDown, User, LogOut, Menu, X } from "lucide-react";
+  
+  /**
+   * En-tête principal (Header)
+   *
+   * Responsabilités:
+   * - Afficher le logo et les liens de navigation principaux.
+   * - Gérer le thème (clair/sombre) via un bouton toggle et persistance localStorage.
+   * - Gérer les menus déroulants: sélection de langue (UI) et menu utilisateur (si connecté).
+   * - Adapter l'affichage aux écrans mobiles (menu hamburger) et bureau (navigation horizontale).
+   */
 
 
 
   export default function Header() {
+    // ------------------
+    // Etats d'interface
+    // ------------------
     const [darkMode, setDarkMode] = useState(false);
     const [langMenuOpen, setLangMenuOpen] = useState(false);
     const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -13,6 +26,9 @@
     const { user, logout, isAuthenticated } = useUser();
     const navigate = useNavigate();
 
+    // -----------------------------
+    // Gestion de la préférence thème
+    // -----------------------------
     const getSavedTheme = () => {
       try {
         return localStorage.getItem('theme');
@@ -31,6 +47,8 @@
     };
 
     useEffect(() => {
+      // A l'initialisation, on applique le thème selon la préférence sauvegardée
+      // ou la préférence système si aucune valeur n'est sauvegardée.
       const savedTheme = getSavedTheme();
       const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
       const initialDark = savedTheme ? savedTheme === 'dark' : prefersDark;
@@ -61,6 +79,7 @@
     };
 
     const handleLogout = () => {
+      // Déconnecte l'utilisateur puis redirige vers l'accueil
       logout();
       navigate('/');
     };
@@ -76,6 +95,11 @@
             </Link>
 
             {/* Desktop Nav Links */}
+            {/*
+              Liens principaux visibles uniquement sur bureau (>= lg):
+              - Accueil, Billet, Boutique, Histoire, Scanner
+              Un menu de langue illustre un futur i18n (non implémenté ici).
+            */}
             <nav className="hidden lg:flex items-center space-x-8 text-[#1a1a1a] ">
               <Link to="/" className="hover:text-[#b08b4f] transition-colors duration-500 text-lg">
                 Accueil
@@ -93,9 +117,7 @@
                 Scanner
               </Link>
 
-              {/* Langue 
-              ajouter des logo des pays pour
-              */}
+              {/* Sélecteur de langue (démo UI) */}
             <div className="relative">
     <button
       onClick={() => setLangMenuOpen(!langMenuOpen)}
@@ -129,6 +151,11 @@
             </nav>
 
             {/* Desktop Actions */}
+            {/*
+              Si l'utilisateur est authentifié: bouton profil ouvrant un menu (email, lien admin si rôle admin, logout).
+              Sinon: lien vers la page de connexion.
+              Le bouton de thème est toujours présent.
+            */}
             <div className="hidden lg:flex items-center space-x-4">
               {isAuthenticated ? (
                 <div className="relative">
@@ -185,6 +212,7 @@
             </div>
 
             {/* Mobile Menu Button */}
+            {/* Boutons visibles uniquement sur mobile: toggle thème + hamburger */}
             <div className="lg:hidden flex items-center space-x-2">
               <button
                 onClick={toggleTheme}
@@ -202,6 +230,11 @@
           </div>
 
           {/* Mobile Menu */}
+          {/*
+            Menu déroulant affiché sur mobile quand `mobileMenuOpen` est vrai.
+            Reprend les liens principaux, et selon l'état d'authentification,
+            affiche soit le panneau utilisateur (avec logout), soit le lien de connexion.
+          */}
           {mobileMenuOpen && (
             <div className="lg:hidden bg-white  border-t border-gray-200 dark:border-gray-700">
               <div className="px-4 py-2 space-y-1">
@@ -284,6 +317,7 @@
         </header>
         
         {/* Spacer pour compenser la navbar fixe */}
+        {/* Ajoute de l'espace sous le header fixé en haut afin d'éviter les recouvrements */}
         <div className="h-16"></div>
       </>
     );

@@ -1,6 +1,14 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import usersData from '../data/users.json';
 
+ /**
+  * Contexte utilisateur
+  * 
+  * Responsabilités:
+  * - Stocker l'état d'authentification (utilisateur courant, chargement, erreurs).
+  * - Fournir des actions: `login`, `register`, `logout`, `updateProfile`.
+  * - Persister la session dans `localStorage` pour conserver la connexion.
+  */
 const UserContext = createContext();
 
 export const useUser = () => {
@@ -24,6 +32,12 @@ export const UserProvider = ({ children }) => {
     }
   }, []);
 
+  /**
+   * Authentification d'un utilisateur existant.
+   * - Simule un appel API (timeout)
+   * - Valide l'email/mot de passe via `users.json`
+   * - Stocke l'utilisateur (sans mot de passe) dans l'état et `localStorage`
+   */
   const login = async (email, password) => {
     setIsLoading(true);
     setError(null);
@@ -52,6 +66,12 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  /**
+   * Inscription d'un nouvel utilisateur.
+   * - Simule un appel API.
+   * - Vérifie l'unicité de l'email dans `users.json`.
+   * - Crée et persiste l'utilisateur côté client (démo).
+   */
   const register = async (userData) => {
     setIsLoading(true);
     setError(null);
@@ -86,11 +106,18 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  /**
+   * Déconnexion: efface l'utilisateur et la persistance.
+   */
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
   };
 
+  /**
+   * Mise à jour des informations du profil en local.
+   * - Simule un appel réseau puis fusionne les champs.
+   */
   const updateProfile = async (updatedData) => {
     if (!user) return { success: false, error: 'Non connecté' };
     
@@ -113,6 +140,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  // Valeurs exposées au reste de l'application
   const value = {
     user,
     isLoading,
@@ -131,3 +159,4 @@ export const UserProvider = ({ children }) => {
     </UserContext.Provider>
   );
 };
+

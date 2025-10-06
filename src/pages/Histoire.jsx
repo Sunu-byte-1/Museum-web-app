@@ -2,6 +2,14 @@ import React from 'react';
 import senghor from '../assets/historique/senghor.webp';
 import travaux from '../assets/historique/travaux.avif';
 import musee from '../assets/historique/musee.webp';
+ 
+ /**
+  * Page "Histoire"
+  *
+  * Présente plusieurs étapes clés du MCN à travers un tableau `sections`:
+  * - Chaque entrée contient un `title`, un tableau `paragraphs` et une `image`.
+  * - L'affichage alterne texte/image pour un rythme visuel agréable.
+  */
 const sections = [
   {
     title: "La genèse de l’idée (1966)",
@@ -44,6 +52,11 @@ export default function Histoire() {
         </div>
 
         <div className="space-y-16">
+          {/*
+            Pour chaque section, on alterne l'ordre des colonnes en fonction de l'index:
+            - idx pair (0, 2, ...): texte à gauche, image à droite
+            - idx impair (1, 3, ...): image à gauche, texte à droite (via classes order)
+          */}
           {sections.map((s, idx) => (
             <div key={s.title} className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               {/* Force: row 1 and 3 => text left, image right; row 2 => image left, text right */}
@@ -68,5 +81,6 @@ export default function Histoire() {
     </div>
   );
 }
+
 
 

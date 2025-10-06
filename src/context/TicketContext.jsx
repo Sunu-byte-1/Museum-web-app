@@ -1,6 +1,15 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import ticketsData from '../data/tickets.json';
 
+ /**
+  * Contexte Billetterie
+  *
+  * Responsabilités:
+  * - Gérer la liste des billets disponibles (`tickets`).
+  * - Gérer le panier (`cart`) avec ajout/suppression/mise à jour.
+  * - Simuler un achat et conserver l'historique (`purchases`).
+  * - Exposer des utilitaires: totaux panier, validations de tickets, QR.
+  */
 const TicketContext = createContext();
 
 export const useTicket = () => {
@@ -12,6 +21,9 @@ export const useTicket = () => {
 };
 
 export const TicketProvider = ({ children }) => {
+  // -------------------------
+  // Etats globaux du contexte
+  // -------------------------
   const [tickets, setTickets] = useState(ticketsData);
   const [cart, setCart] = useState([]);
   const [purchases, setPurchases] = useState([]);
@@ -26,6 +38,9 @@ export const TicketProvider = ({ children }) => {
     }
   }, []);
 
+  // ------------------------------------------------
+  // Gestion du panier: ajout, suppression, mise à jour
+  // ------------------------------------------------
   const addToCart = (ticketId, quantity = 1) => {
     const ticket = tickets.find(t => t.id === ticketId);
     if (!ticket || !ticket.isAvailable) {
@@ -86,6 +101,9 @@ export const TicketProvider = ({ children }) => {
     setCart([]);
   };
 
+  // -----------------
+  // Utilitaires panier
+  // -----------------
   const getCartTotal = () => {
     return cart.reduce((total, item) => total + (item.ticket.price * item.quantity), 0);
   };
@@ -94,6 +112,9 @@ export const TicketProvider = ({ children }) => {
     return cart.reduce((total, item) => total + item.quantity, 0);
   };
 
+  // ----------------------
+  // Simulation d'un achat
+  // ----------------------
   const purchaseTickets = async (customerInfo) => {
     if (cart.length === 0) {
       setError('Le panier est vide');
@@ -135,6 +156,9 @@ export const TicketProvider = ({ children }) => {
     }
   };
 
+  // ---------------------------------
+  // Recherches et validations annexes
+  // ---------------------------------
   const getPurchaseById = (id) => {
     return purchases.find(purchase => purchase.id === parseInt(id));
   };
@@ -157,6 +181,7 @@ export const TicketProvider = ({ children }) => {
     return { valid: false, error: 'Ticket invalide ou expiré' };
   };
 
+  // Valeurs exposées
   const value = {
     tickets,
     cart,
@@ -183,3 +208,4 @@ export const TicketProvider = ({ children }) => {
     </TicketContext.Provider>
   );
 };
+

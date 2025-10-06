@@ -1,6 +1,14 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import artworksData from '../data/artworks.json';
 
+ /**
+  * Contexte Administration
+  *
+  * Responsabilités:
+  * - Gérer le catalogue des œuvres (lecture/ajout/mise à jour/suppression).
+  * - Exposer des statistiques synthétiques pour le tableau de bord.
+  * - Fournir des utilitaires: recherche, bascule de disponibilité, lookup par id.
+  */
 const AdminContext = createContext();
 
 export const useAdmin = () => {
@@ -15,6 +23,7 @@ export const AdminProvider = ({ children }) => {
   const [artworks, setArtworks] = useState(artworksData);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  // Statistiques agrégées affichées dans `adminDashboard.jsx`
   const [statistics, setStatistics] = useState({
     totalArtworks: 0,
     totalVisitors: 0,
@@ -35,6 +44,11 @@ export const AdminProvider = ({ children }) => {
     setStatistics(stats);
   }, [artworks]);
 
+  /**
+   * Ajouter une œuvre
+   * - Simule un appel API puis insère l'œuvre en mémoire.
+   * - Génère un `id`, force `isAvailable=true` et produit un QR `QRxxx`.
+   */
   const addArtwork = async (artworkData) => {
     setIsLoading(true);
     setError(null);
@@ -60,6 +74,9 @@ export const AdminProvider = ({ children }) => {
     }
   };
 
+  /**
+   * Mettre à jour une œuvre existante par `id` (merge partiel).
+   */
   const updateArtwork = async (id, updatedData) => {
     setIsLoading(true);
     setError(null);
@@ -83,6 +100,9 @@ export const AdminProvider = ({ children }) => {
     }
   };
 
+  /**
+   * Supprimer une œuvre par `id`.
+   */
   const deleteArtwork = async (id) => {
     setIsLoading(true);
     setError(null);
@@ -101,6 +121,9 @@ export const AdminProvider = ({ children }) => {
     }
   };
 
+  /**
+   * Basculer la disponibilité d'une œuvre (disponible/indisponible).
+   */
   const toggleArtworkAvailability = async (id) => {
     const artwork = artworks.find(a => a.id === id);
     if (!artwork) return { success: false, error: 'Œuvre non trouvée' };
@@ -108,10 +131,16 @@ export const AdminProvider = ({ children }) => {
     return await updateArtwork(id, { isAvailable: !artwork.isAvailable });
   };
 
+  /**
+   * Récupérer une œuvre par identifiant (number/string).
+   */
   const getArtworkById = (id) => {
     return artworks.find(artwork => artwork.id === parseInt(id));
   };
 
+  /**
+   * Recherche textuelle naïve: titre, artiste ou catégorie.
+   */
   const searchArtworks = (query) => {
     if (!query) return artworks;
     
@@ -122,6 +151,7 @@ export const AdminProvider = ({ children }) => {
     );
   };
 
+  // Valeurs exposées à l'application
   const value = {
     artworks,
     statistics,
@@ -141,3 +171,4 @@ export const AdminProvider = ({ children }) => {
     </AdminContext.Provider>
   );
 };
+

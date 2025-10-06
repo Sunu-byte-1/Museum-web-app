@@ -5,6 +5,16 @@ import eventsData from '../data/events.json';
 //import { Link as ScrollLink, animateScroll as scroll } from 'react-scroll';
 import musee from '../assets/historique/musee.webp';
 
+ /**
+  * Page d'accueil
+  *
+  * Cette page assemble plusieurs sections:
+  * - HeroSection: bannière avec vidéo de fond et CTA principaux
+  * - ExperienceSection: cartes d’accès rapides aux expériences clés
+  * - HistorySection: bref aperçu de l’histoire du musée et chiffres
+  * - EventsSection: carrousel des événements/actus
+  * - CTASection: incitation finale à visiter/acheter
+  */
 
 import { 
   ArrowRight, 
@@ -24,6 +34,7 @@ import {
 } from 'lucide-react';
 
 // Composant Hero Section
+ // Affiche une vidéo plein écran avec un filtre et des boutons d’action.
 function HeroSection() {
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden bg-white dark:bg-gray-900">
@@ -83,6 +94,7 @@ function HeroSection() {
 
 // Composant Choix de l'expérience
 // dans cette section je veux que le coux experience soit à droite et à gauche les horaires du musee,
+ // Trois cartes menant vers: visite virtuelle, visite sur place (billet), scanner œuvre.
 
 function ExperienceSection() {
   const experiences = [
@@ -155,6 +167,7 @@ function ExperienceSection() {
 }
 
 // Composant Historique
+ // Observe l’entrée dans le viewport pour animer les compteurs.
 function HistorySection() {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -258,6 +271,7 @@ function HistorySection() {
 }
 
 // Composant Événements
+ // Liste horizontale défilable d’événements issus de `data/events.json`.
 function EventsSection() {
   return (
     <section className="py-20 bg-[#f5f4ef] shadow-inner relative overflow-hidden">
@@ -317,6 +331,7 @@ function EventsSection() {
 }
 
 // Composant CTA
+ // Incitation finale avec deux CTA: visite virtuelle et achat de ticket.
 function CTASection() {
   return (
     <section className="py-20 bg-[#dddcd9] relative overflow-hidden">
