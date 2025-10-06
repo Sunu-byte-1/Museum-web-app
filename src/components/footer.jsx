@@ -26,27 +26,27 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#1c1c1c] text-white">
+    <footer className="bg-gray-900 text-white transition-colors duration-500">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Informations du musée */}
           <div>
-            <h3 className="text-xl font-bold mb-4">Musée des Civilisations Noires</h3>
+            <h3 className="text-xl font-bold mb-4 text-brand-gold">Musée des Civilisations Noires</h3>
             <p className="text-gray-300 mb-4">
-              Découvrez l'histoire, l'art et la culture à travers nos collections uniques 
+              Découvrez l'histoire, l'art et la culture à travers nos collections uniques
               et nos expositions exceptionnelles.
             </p>
             <div className="flex space-x-4">
-              <a href="facebook.com/mcndakar" className="text-gray-400 hover:text-white transition">
+              <a href="facebook.com/mcndakar" className="text-gray-400 hover:text-brand-gold transition-colors duration-500">
                 <Facebook className="w-5 h-5" />
               </a>
-              <a href="www.x.com/mcndakar" className="text-gray-400 hover:text-white transition">
+              <a href="www.x.com/mcndakar" className="text-gray-400 hover:text-brand-gold transition-colors duration-500">
                 <Twitter className="w-5 h-5" />
               </a>
-              <a href="instagram.com/mcndakar" className="text-gray-400 hover:text-white transition">
+              <a href="instagram.com/mcndakar" className="text-gray-400 hover:text-brand-gold transition-colors duration-500">
                 <Instagram className="w-5 h-5" />
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition">
+              <a href="#" className="text-gray-400 hover:text-brand-gold transition-colors duration-500">
                 <Youtube className="w-5 h-5" />
               </a>
             </div>
@@ -160,4 +160,3 @@ export default function Footer() {
     </footer>
   );
 }
-

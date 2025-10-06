@@ -45,7 +45,7 @@ function App() {
       <AdminProvider>
         <TicketProvider>
           <BrowserRouter>
-            <div className="min-h-screen flex flex-col">
+            <div className="min-h-screen flex flex-col transition-colors duration-500 bg-museum-light dark:bg-museum-dark">
               <Header />
               <main className="flex-1">
                 <Routes>
@@ -57,10 +57,8 @@ function App() {
                   <Route path="/visite-virtuelle/:id" element={<VirtualVisit />} />
                   <Route path="/histoire" element={<Histoire />} />
                   <Route path="/artwork/:id" element={<ArtworkDetail />} />
-                  
                   {/* User routes */}
                   <Route path="/login" element={<UserLogin />} />
-                  
                   {/* Admin routes */}
                   <Route path="/admin/login" element={<AdminLogin />} />
                   <Route path="/admin/dashboard" element={<AdminDashboard />} />
@@ -78,4 +76,3 @@ function App() {
 }
 
 export default App
-

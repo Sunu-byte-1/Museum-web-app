@@ -125,17 +125,16 @@ function ExperienceSection() {
   ];
 // dans cette section je veux que le coux experience soit à droite et à gauche les horaires du musee,
   return (
-    <section className="py-20 bg-[#f5f4ef]">
+    <section className="py-20 bg-[#f5f4ef] dark:bg-museum-darkBg transition-colors duration-500">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-museum-light mb-4 transition-colors duration-500">
             Choisissez votre expérience
           </h2>
-          <p className="text-lg text-gray-600">
+          <p className="text-lg text-gray-600 dark:text-gray-300 transition-colors duration-500">
             Trois façons de découvrir notre patrimoine culturel
           </p>
         </div>
-        
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {experiences.map((exp, index) => {
             const Icon = exp.icon;
@@ -143,15 +142,15 @@ function ExperienceSection() {
               <Link
                 key={index}
                 to={exp.link}
-                className="group bg-dark-500 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3  "
+                className="group bg-white dark:bg-museum-dark rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3"
               >
                 <div className={`w-20 h-20 ${exp.color} ${exp.hoverColor} rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-all duration-300 shadow-lg`}>
                   <Icon className="w-10 h-10 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900  mb-4 text-center group-hover:text-orange-600 transition-colors duration-300">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-museum-light mb-4 text-center group-hover:text-orange-600 transition-colors duration-300">
                   {exp.title}
                 </h3>
-                <p className="text-gray-600  text-center leading-relaxed">
+                <p className="text-gray-600 dark:text-gray-300 text-center leading-relaxed transition-colors duration-300">
                   {exp.description}
                 </p>
                 <div className="mt-6 flex items-center justify-center text-orange-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -368,7 +367,7 @@ function CTASection() {
 
 export default function Accueil() {
   return (
-    <div className="min-h-screen bg-milk">
+    <div className="min-h-screen bg-milk dark:bg-museum-dark transition-colors duration-500">
       <HeroSection />
       <div className="animate-fade-in">
         <ExperienceSection />
@@ -376,6 +375,7 @@ export default function Accueil() {
         <EventsSection />
         <CTASection />
       </div>
+      {/* Le footer n'est pas modifié ici, il reste tel qu'il était */}
     </div>
   );
 }
