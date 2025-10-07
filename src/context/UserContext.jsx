@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import usersData from '../data/users.json';
+import { authService, handleApiError } from '../services/api.js';
 
  /**
   * Contexte utilisateur
@@ -26,41 +26,61 @@ export const UserProvider = ({ children }) => {
 
   // Vérifier si l'utilisateur est connecté au chargement
   useEffect(() => {
-    const savedUser = localStorage.getItem('user');
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
+    const checkAuthStatus = async () => {
+      const token = localStorage.getItem('token');
+      const savedUser = localStorage.getItem('user');
+      
+      if (token && savedUser) {
+        try {
+          // Vérifier la validité du token avec le serveur
+          const response = await authService.getMe();
+          if (response.success) {
+            setUser(response.user);
+            localStorage.setItem('user', JSON.stringify(response.user));
+          } else {
+            // Token invalide, nettoyer le localStorage
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+          }
+        } catch (error) {
+          console.error('Erreur de vérification du token:', error);
+          // Token invalide, nettoyer le localStorage
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+        }
+      }
+    };
+    
+    checkAuthStatus();
   }, []);
 
   /**
    * Authentification d'un utilisateur existant.
-   * - Simule un appel API (timeout)
-   * - Valide l'email/mot de passe via `users.json`
-   * - Stocke l'utilisateur (sans mot de passe) dans l'état et `localStorage`
+   * - Appel API vers le backend
+   * - Valide l'email/mot de passe via l'API
+   * - Stocke l'utilisateur et le token dans l'état et `localStorage`
    */
   const login = async (email, password) => {
     setIsLoading(true);
     setError(null);
     
     try {
-      // Simuler une requête API
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await authService.login(email, password);
       
-      const foundUser = usersData.find(u => u.email === email && u.password === password);
-      
-      if (foundUser) {
-        const userData = { ...foundUser };
-        delete userData.password; // Ne pas stocker le mot de passe
-        setUser(userData);
-        localStorage.setItem('user', JSON.stringify(userData));
-        return { success: true, user: userData };
+      if (response.success) {
+        // Stocker le token et les informations utilisateur
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify(response.user));
+        setUser(response.user);
+        return { success: true, user: response.user };
       } else {
-        setError('Email ou mot de passe incorrect');
-        return { success: false, error: 'Email ou mot de passe incorrect' };
+        setError(response.message);
+        return { success: false, error: response.message };
       }
     } catch (err) {
-      setError('Erreur de connexion');
-      return { success: false, error: 'Erreur de connexion' };
+      const errorInfo = handleApiError(err);
+      setError(errorInfo.message);
+      return { success: false, error: errorInfo.message };
     } finally {
       setIsLoading(false);
     }
@@ -68,39 +88,31 @@ export const UserProvider = ({ children }) => {
 
   /**
    * Inscription d'un nouvel utilisateur.
-   * - Simule un appel API.
-   * - Vérifie l'unicité de l'email dans `users.json`.
-   * - Crée et persiste l'utilisateur côté client (démo).
+   * - Appel API vers le backend
+   * - Vérifie l'unicité de l'email via l'API
+   * - Crée et persiste l'utilisateur avec token
    */
   const register = async (userData) => {
     setIsLoading(true);
     setError(null);
     
     try {
-      // Simuler une requête API
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await authService.register(userData);
       
-      // Vérifier si l'email existe déjà
-      const existingUser = usersData.find(u => u.email === userData.email);
-      if (existingUser) {
-        setError('Cet email est déjà utilisé');
-        return { success: false, error: 'Cet email est déjà utilisé' };
+      if (response.success) {
+        // Stocker le token et les informations utilisateur
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify(response.user));
+        setUser(response.user);
+        return { success: true, user: response.user };
+      } else {
+        setError(response.message);
+        return { success: false, error: response.message };
       }
-      
-      // Créer un nouvel utilisateur
-      const newUser = {
-        id: usersData.length + 1,
-        ...userData,
-        role: 'user'
-      };
-      
-      // Dans une vraie app, on ferait un appel API ici
-      setUser(newUser);
-      localStorage.setItem('user', JSON.stringify(newUser));
-      return { success: true, user: newUser };
     } catch (err) {
-      setError('Erreur lors de l\'inscription');
-      return { success: false, error: 'Erreur lors de l\'inscription' };
+      const errorInfo = handleApiError(err);
+      setError(errorInfo.message);
+      return { success: false, error: errorInfo.message };
     } finally {
       setIsLoading(false);
     }
@@ -109,14 +121,26 @@ export const UserProvider = ({ children }) => {
   /**
    * Déconnexion: efface l'utilisateur et la persistance.
    */
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('user');
+  const logout = async () => {
+    try {
+      // Appeler l'API de déconnexion si l'utilisateur est connecté
+      if (user) {
+        await authService.logout();
+      }
+    } catch (error) {
+      console.error('Erreur lors de la déconnexion:', error);
+    } finally {
+      // Nettoyer le localStorage et l'état
+      setUser(null);
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
+    }
   };
 
   /**
-   * Mise à jour des informations du profil en local.
-   * - Simule un appel réseau puis fusionne les champs.
+   * Mise à jour des informations du profil via l'API.
+   * - Appel API vers le backend
+   * - Met à jour le profil utilisateur
    */
   const updateProfile = async (updatedData) => {
     if (!user) return { success: false, error: 'Non connecté' };
@@ -125,16 +149,20 @@ export const UserProvider = ({ children }) => {
     setError(null);
     
     try {
-      // Simuler une requête API
-      await new Promise(resolve => setTimeout(resolve, 500));
+      const response = await authService.updateProfile(updatedData);
       
-      const updatedUser = { ...user, ...updatedData };
-      setUser(updatedUser);
-      localStorage.setItem('user', JSON.stringify(updatedUser));
-      return { success: true, user: updatedUser };
+      if (response.success) {
+        setUser(response.user);
+        localStorage.setItem('user', JSON.stringify(response.user));
+        return { success: true, user: response.user };
+      } else {
+        setError(response.message);
+        return { success: false, error: response.message };
+      }
     } catch (err) {
-      setError('Erreur lors de la mise à jour');
-      return { success: false, error: 'Erreur lors de la mise à jour' };
+      const errorInfo = handleApiError(err);
+      setError(errorInfo.message);
+      return { success: false, error: errorInfo.message };
     } finally {
       setIsLoading(false);
     }

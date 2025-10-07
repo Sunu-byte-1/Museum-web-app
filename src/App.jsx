@@ -28,9 +28,9 @@ import Accueil from './pages/accueil'
 import UserLogin from './pages/user/UserLogin'
 import ArtworkDetail from './pages/user/ArtworkDetail'
 import PurchaseTicket from './pages/user/PurchaseTicket'
-import Boutique from './pages/user/Boutique'
-import ScanArtwork from './pages/user/ScanArtwork'
-import VirtualVisit from './pages/user/VirtualVisit'
+import Boutique from './pages/user/BoutiqueEnhanced'
+import ScanArtwork from './pages/user/ScanArtworkEnhanced'
+import VirtualVisit from './pages/user/VirtualVisitEnhanced'
 import Histoire from './pages/Histoire'
 
 // Admin pages

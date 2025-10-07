@@ -1,6 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Camera, QrCode, CheckCircle, XCircle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Camera, QrCode, CheckCircle, XCircle, User, Lock } from 'lucide-react';
+import { useUser } from '../../context/UserContext.jsx';
+import { artworkService, handleApiError } from '../../services/api.js';
+import AuthPopup from '../../components/AuthPopup.jsx';
 
 export default function ScanArtwork() {
     const [isScanning, setIsScanning] = useState(false);
@@ -8,10 +12,13 @@ export default function ScanArtwork() {
     const [scanResult, setScanResult] = useState(null);
     const [error, setError] = useState(null);
     const [locationAllowed, setLocationAllowed] = useState(null);
+    const [showAuthPopup, setShowAuthPopup] = useState(false);
+    const [isValidating, setIsValidating] = useState(false);
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const detectorRef = useRef(null);
     const navigate = useNavigate();
+    const { user, isAuthenticated } = useUser();
 
     // Simulation de la localisation
     useEffect(() => {
